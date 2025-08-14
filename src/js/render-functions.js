@@ -3,15 +3,66 @@ import SimpleLightbox from "simplelightbox";
 // Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
 
+const gallery = document.querySelector('.gallery');
+const loader = document.querySelector('.loader-hidden');
 
-function createGallery(images) {
+let galleryLight = null;
+
+export function createGallery(images) {
+
+    let markup = images.map(image => `<li class="item-gallery">
+        <a href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" width="360px" height="152px"> </a>
+        <ul class="card-info">
+          <li>
+            <h4>Likes</h4>
+            <p>${image.likes}</p>
+          </li>
+
+          <li>
+            <h4>Views</h4>
+            <p>${image.views}</p>
+          </li>
+          <li>
+            <h4>Comments</h4>
+            <p>${image.comments}</p>
+          </li>
+          <li>
+            <h4>Downloads</h4>
+            <p>${image.downloads}</p>
+          </li>
+        </ul>
+      </li>`).join('');
     
+    gallery.insertAdjacentHTML('afterbegin', markup);
+
+    if (!galleryLight) {
+        galleryLight = new SimpleLightbox('.gallery a', {
+            captionsData: 'alt',
+            captionDelay: 250
+        });
+    } else {
+        galleryLight.refresh();
+    }
+}
+
+
+export function clearGallery() {
+    gallery.innerHTML = '';
+}
+
+export function showLoader() {
+    if (loader) {
+        loader.classList.add('is-active');
+    }
+}
+
+export function hideLoader() {
+    if (loader) {
+        loader.classList.remove('is-active');
+    }
 }
 
 
 
 
-// <div class="gallery">
-//     <a href="images/image1.jpg"><img src="images/thumbs/thumb1.jpg" alt="" title=""/></a>
-//     <a href="images/image2.jpg"><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"/></a>
-// </div>
+
